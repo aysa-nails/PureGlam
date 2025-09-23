@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pure Glam — Belleza Natural</title>
+  <meta name="description" content="Pure Glam: productos de belleza para pelo, piel y uñas. Compra por WhatsApp.">
+  <style>
+    :root{
+      --bg:#0f1115;
+      --card:#171a21;
+      --muted:#8aa39b;
+      --brand:#89d4b7;
+      --brand-2:#d5f2ea;
+      --text:#e8f1ef;
+      --accent:#f5b8d1;
+      --ok:#9be69b;
+      --danger:#ff8c8c;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 400px at 10% -10%, rgba(206,255,236,.12), transparent 60%),
+        radial-gradient(1200px 400px at 110% 10%, rgba(255,205,232,.10), transparent 60%),
+        linear-gradient(180deg, #0f1316 0%, #0e1513 100%);
+      background-attachment: fixed;
+    }
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    header{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px
+    }
+    .logo{
+      width:42px;height:42px;border-radius:12px;
+      background:
+        radial-gradient(120% 120% at 20% 10%, var(--brand) 0%, #7bd1b4 35%, #53a48d 60%, #2b6e5a 100%);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.08), var(--shadow);
+      position:relative;overflow:hidden;
+    }
+    .logo:after{
+      content:"";position:absolute;inset:0;
+      background:
+        radial-gradient(60px 30px at 70% 20%, rgba(255,255,255,.18), transparent 60%),
+        radial-gradient(80px 40px at 30% 80%, rgba(255,255,255,.12), transparent 60%);
+      mix-blend-mode: screen;
+    }
+    .title{
+      line-height:1.05
+    }
+    .title h1{margin:0;font-size:28px;letter-spacing:.4px}
+    .title p{margin:2px 0 0;color:var(--muted);font-size:14px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      border:1px solid rgba(255,255,255,.08);
+      padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03);color:var(--text);
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .chip input, .chip select{
+      background:transparent;border:none;outline:none;color:var(--text)
+    }
+    .chip input::placeholder{color:#97a3a0}
+    .grid{
+      display:grid;gap:14px;grid-template-columns:1fr;align-items:start
+    }
+    @media (min-width:960px){
+      .grid{grid-template-columns: 1fr 360px}
+    }
+    .catalog{
+      display:grid;gap:14px;grid-template-columns: repeat(1,minmax(0,1fr))
+    }
+    @media (min-width:640px){
+      .catalog{grid-template-columns: repeat(2,minmax(0,1fr))}
+    }
+    @media (min-width:1200px){
+      .catalog{grid-template-columns: repeat(3,minmax(0,1fr))}
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)
+    }
+    .product-img{
+      aspect-ratio: 4/3;border-radius:14px;overflow:hidden;
+      background:linear-gradient(135deg, rgba(137,212,183,.18), rgba(245,184,209,.18));
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .product-img svg{width:42%;height:auto;opacity:.85}
+    .product-info{margin-top:10px}
+    .product-title{font-weight:700;margin:0 0 6px;font-size:16px}
+    .product-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+    .price{font-weight:700;color:var(--brand-2)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 12px;border-radius:12px;border:none;cursor:pointer;
+      color:#0c1110;background:var(--brand);font-weight:700;width:100%;margin-top:10px
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn.outline{
+      background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.16)
+    }
+
+    /* Sidebar / Carrito */
+    .panel{
+      position:sticky;top:16px;border-radius:var(--radius);padding:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .panel h3{margin:0 0 8px;font-size:18px}
+    .cart-empty{color:var(--muted);font-size:14px}
+    .cart-item{
+      display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;
+      padding:10px;border-radius:12px;background:rgba(255,255,255,.03);margin:8px 0
+    }
+    .cart-item h4{margin:0 0 4px;font-size:14px}
+    .cart-item small{color:var(--muted)}
+    .qty{
+      display:inline-flex;align-items:center;border:1px solid rgba(255,255,255,.15);border-radius:12px;overflow:hidden
+    }
+    .qty button{background:transparent;border:none;color:var(--text);padding:6px 10px;cursor:pointer}
+    .qty input{width:42px;text-align:center;background:transparent;border:none;color:var(--text);outline:none}
+    .cart-row-right{display:flex;align-items:center;gap:10px}
+    .remove{color:var(--danger);cursor:pointer;font-size:13px}
+    .summary{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+    .total{font-size:18px;font-weight:800}
+    .whatsapp{
+      background:linear-gradient(90deg, var(--ok), #6edc6e);
+      color:#0b120e;font-weight:800;border:none;border-radius:12px;padding:12px;width:100%;cursor:pointer;margin-top:8px
+    }
+    .footer{
+      margin-top:22px;padding:14px;border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)
+    }
+    .footer a{color:var(--brand-2);text-decoration:none}
+    .muted{color:var(--muted)}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:12px;padding:6px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <h1>Pure Glam</h1>
+          <p>Belleza & naturaleza para pelo, piel y uñas</p>
+        </div>
+      </div>
+      <div class="actions">
+        <label class="chip">
+          🔎
+          <input id="search" type="search" placeholder="Buscar productos..." />
+        </label>
+        <label class="chip">
+          🏷️
+          <select id="category">
+            <option value="todas">Todas las categorías</option>
+            <option value="pelo">Pelo</option>
+            <option value="piel">Piel</option>
+            <option value="unas">Uñas</option>
+          </select>
+        </label>
+        <label class="chip">
+          ↕️
+          <select id="sort">
+            <option value="relevancia">Orden: Relevancia</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Catálogo -->
+      <main>
+        <div id="catalog" class="catalog"></div>
+      </main>
+
+      <!-- Panel lateral / Carrito -->
+      <aside class="panel">
+        <h3>🧺 Tu carrito</h3>
+        <div id="cart"></div>
+        <div class="summary">
+          <span class="badge">Envió y pago se coordinan por WhatsApp</span>
+        </div>
+        <button id="checkout" class="whatsapp">Finalizar por WhatsApp</button>
+        <div class="footer">
+          <div class="muted" style="font-size:14px; line-height:1.4">
+            <strong>Contacto</strong><br/>
+            WhatsApp: <a href="#" id="contactWa">+54 11 3140 2267</a><br/>
+            Email: <a href="mailto:ventas@pureglam.example">ventas@pureglam.example</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <template id="tpl-card">
+    <div class="card">
+      <div class="product-img" aria-hidden="true"></div>
+      <div class="product-info">
+        <h3 class="product-title"></h3>
+        <div class="product-meta">
+          <span class="muted category"></span>
+          <span class="price"></span>
+        </div>
+        <button class="btn add">Agregar al carrito</button>
+        <button class="btn outline info">Detalles</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-cart-item">
+    <div class="cart-item">
+      <div>
+        <h4 class="ci-title"></h4>
+        <small class="ci-sub muted"></small>
+      </div>
+      <div class="cart-row-right">
+        <div class="qty">
+          <button class="minus" title="Disminuir">−</button>
+          <input class="qty-input" type="number" min="1" />
+          <button class="plus" title="Aumentar">+</button>
+        </div>
+        <div class="remove" title="Eliminar">✕</div>
+      </div>
+    </div>
+  </template>
+
+  <!-- SVGs livianos para ilustraciones (sin dependencias externas) -->
+  <svg width="0" height="0" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+    <symbol id="leaf" viewBox="0 0 64 64">
+      <path d="M55 9C42 9 21 21 14 34c-6 11-5 23 0 23s12-5 18-13c7-10 14-29 23-35Z" fill="currentColor" opacity=".85"/>
+      <path d="M8 56c10-2 22-10 30-20" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+    </symbol>
+    <symbol id="bottle" viewBox="0 0 64 64">
+      <rect x="22" y="10" width="20" height="10" rx="3" fill="currentColor" />
+      <rect x="18" y="18" width="28" height="36" rx="8" fill="currentColor" opacity=".85"/>
+      <rect x="22" y="24" width="20" height="10" rx="3" fill="#ffffff22"/>
+    </symbol>
+    <symbol id="cream" viewBox="0 0 64 64">
+      <rect x="12" y="26" width="40" height="24" rx="6" fill="currentColor" opacity=".85"/>
+      <rect x="18" y="20" width="28" height="8" rx="4" fill="currentColor"/>
+      <path d="M20 18c6-8 18-8 24 0" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <script>
+    // ===================== Configuración =====================
+    const WHATSAPP_NUMBER = "541131402267"; // <— si hace falta, cámbialo a 5491131402267
+    const CURRENCY = "ARS";
+
+    const PRODUCTS = [
+      // Pelo
+      { id: "p1", name: "Shampoo Nutritivo Bamboo & Matcha", category: "pelo", price: 8990, sku:"SH-001",
+        icon: "bottle", details: "Limpieza suave con extractos naturales. Sin parabenos ni sulfatos." },
+      { id: "p2", name: "Acondicionador Hidratación Profunda", category: "pelo", price: 9490, sku:"AC-002",
+        icon: "bottle", details: "Brillo y suavidad con aceite de argán. Ideal uso diario." },
+      { id: "p3", name: "Sérum Antifrizz Reparador", category: "pelo", price: 12990, sku:"SE-003",
+        icon: "leaf", details: "Suaviza el encrespamiento y protege del calor. Acabado sedoso." },
+
+      // Piel
+      { id: "p4", name: "Gel de Limpieza Facial Té Verde", category: "piel", price: 7990, sku:"GF-004",
+        icon: "bottle", details: "Purifica sin resecar. Para todo tipo de piel." },
+      { id: "p5", name: "Crema Facial Hidro-Glow", category: "piel", price: 13990, sku:"CR-005",
+        icon: "cream", details: "Hidratación 24h con ácido hialurónico. Luminosidad natural." },
+      { id: "p6", name: "Protector Solar FPS 50+ Ligero", category: "piel", price: 11990, sku:"PS-006",
+        icon: "leaf", details: "Textura liviana, sin residuo blanco. Amplio espectro." },
+
+      // Uñas
+      { id: "p7", name: "Aceite Nutritivo para Cutículas", category: "unas", price: 5990, sku:"CT-007",
+        icon: "leaf", details: "Fortalece y suaviza cutículas con vitamina E." },
+      { id: "p8", name: "Base Fortalecedora Keratina", category: "unas", price: 6990, sku:"UN-008",
+        icon: "bottle", details: "Refuerza las uñas y mejora la adherencia del esmalte." },
+      { id: "p9", name: "Crema de Manos Rosa Mosqueta", category: "unas", price: 6490, sku:"CM-009",
+        icon: "cream", details: "Nutrición rápida sin sensación pegajosa." }
+    ];
+
+    // ===================== Utilidades =====================
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    const formatMoney = (n) =>
+      new Intl.NumberFormat("es-AR", {style:"currency", currency: CURRENCY, maximumFractionDigits:0}).format(n);
+
+    const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+    const load = (key, fallback) => {
+      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+      catch { return fallback; }
+    };
+
+    // ===================== Estado =====================
+    let state = {
+      query: "",
+      category: "todas",
+      sort: "relevancia",
+      cart: load("pureglam_cart", {})
+    };
+
+    // ===================== Render Catálogo =====================
+    function renderCatalog(){
+      const wrap = $("#catalog");
+      wrap.innerHTML = "";
+      const tpl = $("#tpl-card").content;
+
+      let list = PRODUCTS.filter(p => {
+        const q = state.query.trim().toLowerCase();
+        const passQuery = !q || (p.name.toLowerCase().includes(q) || p.details.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
+        const passCat = state.category === "todas" || p.category === state.category;
+        return passQuery && passCat;
+      });
+
+      if(state.sort === "precio-asc") list.sort((a,b) => a.price - b.price);
+      else if(state.sort === "precio-desc") list.sort((a,b) => b.price - a.price);
+      // relevancia: mantener orden original
+
+      list.forEach(p => {
+        const node = document.importNode(tpl, true);
+        const img = node.querySelector(".product-img");
+        img.innerHTML = `<svg viewBox="0 0 64 64"><use href="#${p.icon}"/></svg>`;
+
+        node.querySelector(".product-title").textContent = p.name;
+        node.querySelector(".category").textContent = p.category.toUpperCase();
+        node.querySelector(".price").textContent = formatMoney(p.price);
+
+        node.querySelector(".add").addEventListener("click", () => addToCart(p.id, 1));
+        node.querySelector(".info").addEventListener("click", () => {
+          alert(`${p.name}\n\nSKU: ${p.sku}\nCategoría: ${p.category}\nPrecio: ${formatMoney(p.price)}\n\n${p.details}`);
+        });
+
+        wrap.appendChild(node);
+      });
+
+      if(list.length === 0){
+        wrap.innerHTML = `<div class="card"><div class="muted">No encontramos resultados para tu búsqueda. Prueba con otro término o categoría.</div></div>`;
+      }
+    }
+
+    // ===================== Carrito =====================
+    function addToCart(id, qty=1){
+      state.cart[id] = (state.cart[id] || 0) + qty;
+      save("pureglam_cart", state.cart);
+      renderCart();
+    }
+    function removeFromCart(id){
+      delete state.cart[id];
+      save("pureglam_cart", state.cart);
+      renderCart();
+    }
+    function changeQty(id, qty){
+      qty = Math.max(1, parseInt(qty || "1", 10));
+      state.cart[id] = qty;
+      save("pureglam_cart", state.cart);
+      renderCart();
+    }
+    function cartEntries(){
+      return Object.entries(state.cart).map(([id, qty]) => {
+        const p = PRODUCTS.find(x => x.id === id);
+        return { ...p, qty, lineTotal: p.price * qty };
+      });
+    }
+    function cartTotal(){
+      return cartEntries().reduce((s, it) => s + it.lineTotal, 0);
+    }
+    function renderCart(){
+      const cart = $("#cart");
+      cart.innerHTML = "";
+      const items = cartEntries();
+      if(items.length === 0){
+        cart.innerHTML = `<div class="cart-empty">Tu carrito está vacío. Agrega productos del catálogo.</div>`;
+      } else {
+        const tpl = $("#tpl-cart-item").content;
+        items.forEach(it => {
+          const node = document.importNode(tpl, true);
+          node.querySelector(".ci-title").textContent = it.name;
+          node.querySelector(".ci-sub").textContent = `${it.sku} · ${formatMoney(it.price)} · ${it.category.toUpperCase()}`;
+          const input = node.querySelector(".qty-input");
+          input.value = it.qty;
+          node.querySelector(".minus").addEventListener("click", () => changeQty(it.id, (+input.value||1)-1));
+          node.querySelector(".plus").addEventListener("click", () => changeQty(it.id, (+input.value||1)+1));
+          input.addEventListener("change", e => changeQty(it.id, e.target.value));
+          node.querySelector(".remove").addEventListener("click", () => removeFromCart(it.id));
+          cart.appendChild(node);
+        });
+      }
+      // Summary
+      const summary = document.createElement("div");
+      summary.className = "summary";
+      summary.innerHTML = `
+        <span class="muted">Total</span>
+        <span class="total">${formatMoney(cartTotal())}</span>
+      `;
+      cart.appendChild(summary);
+    }
+
+    // ===================== Checkout WhatsApp =====================
+    function buildWhatsAppMessage(){
+      const items = cartEntries();
+      if(items.length === 0) return "Hola Pure Glam, quiero consultar por productos.";
+      const lines = [
+        "Hola Pure Glam 👋",
+        "Quiero coordinar compra:",
+        ...items.map(it => `• ${it.name} x${it.qty} — ${formatMoney(it.lineTotal)} (SKU ${it.sku})`),
+        `Total: ${formatMoney(cartTotal())}`,
+        "",
+        "Datos de contacto:",
+        "Nombre: ________",
+        "Barrio/Ciudad: ________",
+        "Método de pago (efectivo/transferencia/otro): ________"
+      ];
+      return lines.join("\n");
+    }
+    function openWhatsApp(msg){
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
+    }
+
+    // ===================== Eventos UI =====================
+    $("#search").addEventListener("input", e => { state.query = e.target.value; renderCatalog(); });
+    $("#category").addEventListener("change", e => { state.category = e.target.value; renderCatalog(); });
+    $("#sort").addEventListener("change", e => { state.sort = e.target.value; renderCatalog(); });
+
+    $("#checkout").addEventListener("click", () => {
+      const msg = buildWhatsAppMessage();
+      openWhatsApp(msg);
+    });
+    $("#contactWa").addEventListener("click", (e) => {
+      e.preventDefault();
+      openWhatsApp("Hola, quisiera más información ✨");
+    });
+
+    // ===================== Init =====================
+    renderCatalog();
+    renderCart();
+  </script>
+</body>
+</html>
